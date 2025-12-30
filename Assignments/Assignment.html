@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <title>Submit Assignment | Invertis LMS</title>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .drag-active {
+            border-color: #3b82f6 !important;
+            background-color: #eff6ff !important;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 min-h-screen py-10 px-4">
+
+    <div class="max-w-3xl mx-auto">
+        <!-- Breadcrumb -->
+        <nav class="flex mb-8 text-sm text-slate-500">
+            <a href="../index.html" class="hover:text-blue-600 transition-colors">Dashboard</a>
+            <span class="mx-2">/</span>
+            <span class="text-slate-800 font-medium">Assignment Submission</span>
+        </nav>
+
+        <div class="glass-panel rounded-2xl shadow-xl overflow-hidden">
+            <!-- Header -->
+            <div class="bg-slate-900 px-8 py-6">
+                <h1 class="text-2xl font-bold text-white">Assignment Upload</h1>
+                <p class="text-blue-200 mt-1">Submit your work before the deadline.</p>
+            </div>
+
+            <div class="p-8">
+                <!-- Instructions -->
+                <div class="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-8 flex items-start gap-3">
+                    <svg class="w-5 h-5 text-blue-600 mt-0.5 shrink-0" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="text-sm text-blue-800">
+                        <p class="font-medium">Submission Guidelines:</p>
+                        <ul class="list-disc list-inside mt-1 space-y-1 text-blue-700/80">
+                            <li>Supported formats: PDF, DOCX, ZIP.</li>
+                            <li>Maximum file size: 10 MB per file.</li>
+                            <li>Ensure your file is named: <code
+                                    class="bg-blue-100 px-1 rounded">Subject_RollNo_Name</code></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Upload Area -->
+                <div id="drop-zone"
+                    class="border-2 border-dashed border-slate-300 rounded-xl p-10 text-center transition-all bg-slate-50 hover:bg-white cursor-pointer group">
+                    <div
+                        class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-slate-800 mb-1">Drag & Drop files here</h3>
+                    <p class="text-slate-500 mb-6">or click to browse from your computer</p>
+                    <input type="file" id="file-input" class="hidden" multiple>
+                    <button onclick="document.getElementById('file-input').click()"
+                        class="px-6 py-2 bg-white border border-slate-300 text-slate-700 font-medium rounded-lg hover:bg-slate-50 hover:border-slate-400 transition-all shadow-sm">
+                        Browse Files
+                    </button>
+                </div>
+
+                <!-- File List Preview (Hidden initially) -->
+                <div id="file-list" class="mt-6 space-y-3 hidden">
+                    <!-- Javascript will populate this -->
+                </div>
+
+                <!-- Actions -->
+                <div class="mt-8 flex items-center justify-end gap-4 border-t border-slate-100 pt-6">
+                    <button onclick="window.history.back()"
+                        class="px-5 py-2.5 text-slate-600 font-medium hover:bg-slate-100 rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <button id="submit-btn"
+                        class="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-500 shadow-lg shadow-blue-500/20 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                        Submit Assignment
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal Notification -->
+    <div id="success-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full relative z-10 transform scale-90 opacity-0 transition-all duration-300"
+            id="modal-content">
+            <div
+                class="w-16 h-16 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-bold text-center text-slate-800 mb-2">Submission Successful!</h3>
+            <p class="text-center text-slate-500 mb-6">Your assignment has been uploaded safely.</p>
+            <button onclick="window.location.href='../index.html'"
+                class="w-full py-2.5 bg-green-600 text-white font-medium rounded-lg hover:bg-green-500 transition-colors">
+                Back to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+        const submitBtn = document.getElementById('submit-btn');
+        let files = [];
+
+        // Drag & Drop handlers
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('drag-active');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('drag-active');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('drag-active');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(newFiles) {
+            if (newFiles.length > 0) {
+                files = [...files, ...Array.from(newFiles)];
+                renderFiles();
+                fileList.classList.remove('hidden');
+            }
+        }
+
+        function renderFiles() {
+            fileList.innerHTML = '';
+            files.forEach((file, index) => {
+                const size = (file.size / 1024 / 1024).toFixed(2);
+                const html = `
+                    <div class="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-lg shadow-sm">
+                        <div class="flex items-center gap-3 overflow-hidden">
+                            <div class="w-10 h-10 bg-blue-50 text-blue-500 rounded-lg flex items-center justify-center shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium text-slate-700 truncate">${file.name}</p>
+                                <p class="text-xs text-slate-500">${size} MB</p>
+                            </div>
+                        </div>
+                        <button onclick="removeFile(${index})" class="text-slate-400 hover:text-red-500 transition-colors p-1">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        </button>
+                    </div>
+                `;
+                fileList.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        window.removeFile = function (index) {
+            files.splice(index, 1);
+            renderFiles();
+            if (files.length === 0) {
+                fileList.classList.add('hidden');
+            }
+        }
+
+        // Submit Logic
+        submitBtn.addEventListener('click', () => {
+            if (files.length === 0) {
+                alert('Please upload at least one file.');
+                return;
+            }
+
+            const originalText = submitBtn.innerText;
+            submitBtn.innerText = 'Uploading...';
+            submitBtn.disabled = true;
+
+            // Simulate Upload
+            setTimeout(() => {
+                const modal = document.getElementById('success-modal');
+                const content = document.getElementById('modal-content');
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    content.classList.remove('scale-90', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }, 1500);
+        });
+    </script>
+</body>
+
+</html>

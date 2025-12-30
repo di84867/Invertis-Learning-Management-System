@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <title>Dashboard | Invertis LMS</title>
+  <style>
+    body {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .glass-nav {
+      background: rgba(23, 37, 84, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    @keyframes fade-in-up {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in-up {
+      animation: fade-in-up 0.6s ease-out forwards;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-slate-800">
+
+  <!-- Navigation -->
+  <nav class="glass-nav fixed w-full z-50 transition-all duration-300 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <!-- Logo Section -->
+        <div class="flex items-center gap-4">
+          <a href="/" class="flex items-center gap-3 group">
+            <div class="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
+              <img src="./images/footer_logo.png" alt="Invertis Logo" class="h-8 w-auto brightness-0 invert">
+            </div>
+            <span class="text-white text-xl font-bold tracking-tight">Invertis<span
+                class="text-blue-400">LMS</span></span>
+          </a>
+        </div>
+
+        <!-- Center Title (Hidden on small screens) -->
+        <div class="hidden md:block">
+          <h1 class="text-white/90 text-lg font-medium">Student Dashboard</h1>
+        </div>
+
+        <!-- Right Actions -->
+        <div class="flex items-center gap-4">
+          <div class="hidden sm:flex items-center gap-2 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
+            <img src="./images/india-flag.svg" alt="IN" class="w-5 h-auto rounded-sm">
+            <span class="text-xs text-white/80 font-medium">IN</span>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button onclick="window.location.href='./logins/student.html'"
+              class="px-5 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20 active:scale-95">
+              Student
+            </button>
+            <button onclick="window.location.href='./logins/teacher.html'"
+              class="px-5 py-2.5 text-sm font-medium text-blue-100 border border-blue-400/30 rounded-lg hover:bg-white/10 transition-all active:scale-95">
+              Teacher
+            </button>
+            <button onclick="window.location.href='./logins/admin.html'"
+              class="px-5 py-2.5 text-sm font-medium text-amber-100 border border-amber-500/30 bg-amber-500/10 rounded-lg hover:bg-amber-500/20 transition-all active:scale-95">
+              Admin
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="pt-28 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+
+    <!-- Welcome Header -->
+    <div class="mb-10 text-center md:text-left animate-fade-in-up">
+      <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Welcome back, Student</h2>
+      <p class="text-slate-500 text-lg">Access your courses, assignments, and learning resources.</p>
+    </div>
+
+    <!-- Course Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+      <!-- Card 1 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden card-hover transition-all duration-300 flex flex-col h-full group">
+        <div class="relative h-48 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+          <img src="./images/Computer-Network-Types.webp"
+            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+            alt="Computer Networks">
+          <span class="absolute bottom-3 left-4 text-white font-semibold z-20 text-lg">Computer Networks</span>
+        </div>
+        <div class="p-5 flex-1 flex flex-col">
+          <p class="text-slate-600 text-sm mb-6 line-clamp-2">Systems of interconnected devices sharing resources and
+            communication protocols.</p>
+          <div class="mt-auto grid grid-cols-1 gap-3">
+            <button onclick="window.location.href='./Assignments/Assignment.html'"
+              class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-blue-50 text-sm font-medium transition-colors hover:text-blue-600">
+              Assignments
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden card-hover transition-all duration-300 flex flex-col h-full group">
+        <div class="relative h-48 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+          <img src="./images/design-thinking-example.webp"
+            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+            alt="Compiler Design">
+          <span class="absolute bottom-3 left-4 text-white font-semibold z-20 text-lg">Compiler Design</span>
+        </div>
+        <div class="p-5 flex-1 flex flex-col">
+          <p class="text-slate-600 text-sm mb-6 line-clamp-2">The theory and practice of translating source code into
+            machine code.</p>
+          <div class="mt-auto grid grid-cols-1 gap-3">
+            <button onclick="window.location.href='./Assignments/Assignment.html'"
+              class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-blue-50 text-sm font-medium transition-colors hover:text-blue-600">
+              Assignments
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden card-hover transition-all duration-300 flex flex-col h-full group">
+        <div class="relative h-48 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+          <img src="./images/OIP.jpeg"
+            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+            alt="Backend Dev">
+          <span class="absolute bottom-3 left-4 text-white font-semibold z-20 text-lg">Backend Dev</span>
+        </div>
+        <div class="p-5 flex-1 flex flex-col">
+          <p class="text-slate-600 text-sm mb-6 line-clamp-2">Server-side programming, database management, and API
+            architecture.</p>
+          <div class="mt-auto grid grid-cols-1 gap-3">
+            <button onclick="window.location.href='./Assignments/Assignment.html'"
+              class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-blue-50 text-sm font-medium transition-colors hover:text-blue-600">
+              Assignments
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden card-hover transition-all duration-300 flex flex-col h-full group">
+        <div class="relative h-48 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+          <img src="./images/internet-information-technology-businessman-hand-showing-concept-75784736.webp"
+            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+            alt="Internet Tech">
+          <span class="absolute bottom-3 left-4 text-white font-semibold z-20 text-lg">Internet Tech</span>
+        </div>
+        <div class="p-5 flex-1 flex flex-col">
+          <p class="text-slate-600 text-sm mb-6 line-clamp-2">Protocols, standards, and tools that power the modern web.
+          </p>
+          <div class="mt-auto grid grid-cols-1 gap-3">
+            <button onclick="window.location.href='./Assignments/Assignment.html'"
+              class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-blue-50 text-sm font-medium transition-colors hover:text-blue-600">
+              Assignments
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden card-hover transition-all duration-300 flex flex-col h-full group">
+        <div class="relative h-48 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+          <img src="./images/OIP (1).jpeg"
+            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+            alt="TQM">
+          <span class="absolute bottom-3 left-4 text-white font-semibold z-20 text-lg">Total Quality Mgt</span>
+        </div>
+        <div class="p-5 flex-1 flex flex-col">
+          <p class="text-slate-600 text-sm mb-6 line-clamp-2">Strategies for continuous improvement and customer
+            satisfaction.</p>
+          <div class="mt-auto grid grid-cols-1 gap-3">
+            <button onclick="window.location.href='./Assignments/Assignment.html'"
+              class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-blue-50 text-sm font-medium transition-colors hover:text-blue-600">
+              Assignments
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden card-hover transition-all duration-300 flex flex-col h-full group">
+        <div class="relative h-48 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+          <img src="./images/OIP (2).jpeg"
+            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+            alt="AI">
+          <span class="absolute bottom-3 left-4 text-white font-semibold z-20 text-lg">Artificial Intelligence</span>
+        </div>
+        <div class="p-5 flex-1 flex flex-col">
+          <p class="text-slate-600 text-sm mb-6 line-clamp-2">Machine learning, neural networks, and cognitive
+            simulations.</p>
+          <div class="mt-auto grid grid-cols-1 gap-3">
+            <button onclick="window.location.href='./Assignments/Assignment.html'"
+              class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-blue-50 text-sm font-medium transition-colors hover:text-blue-600">
+              Assignments
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden card-hover transition-all duration-300 flex flex-col h-full group">
+        <div class="relative h-48 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+          <img src="./images/OIP (3).jpeg"
+            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+            alt="Aptitude">
+          <span class="absolute bottom-3 left-4 text-white font-semibold z-20 text-lg">Aptitude</span>
+        </div>
+        <div class="p-5 flex-1 flex flex-col">
+          <p class="text-slate-600 text-sm mb-6 line-clamp-2">Logical reasoning and problem-solving skill development.
+          </p>
+          <div class="mt-auto grid grid-cols-1 gap-3">
+            <button onclick="window.location.href='./Assignments/Assignment.html'"
+              class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-blue-50 text-sm font-medium transition-colors hover:text-blue-600">
+              Assignments
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden card-hover transition-all duration-300 flex flex-col h-full group">
+        <div class="relative h-48 overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+          <img src="./images/OIP (4).jpeg"
+            class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+            alt="Bridgecomm">
+          <span class="absolute bottom-3 left-4 text-white font-semibold z-20 text-lg">Bridgecomm</span>
+        </div>
+        <div class="p-5 flex-1 flex flex-col">
+          <p class="text-slate-600 text-sm mb-6 line-clamp-2">Advanced curriculum for bridging communication gaps.</p>
+          <div class="mt-auto grid grid-cols-1 gap-3">
+            <button onclick="window.location.href='./Assignments/Assignment.html'"
+              class="flex items-center justify-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-blue-50 text-sm font-medium transition-colors hover:text-blue-600">
+              Assignments
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 border-t border-slate-800 text-slate-300 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+
+        <!-- Company Info -->
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <img src="./images/footer_logo.png" class="h-6 brightness-0 invert" alt="Logo">
+            <span class="text-xl font-bold text-white">Invertis<span class="text-blue-500">University</span></span>
+          </div>
+          <p class="text-sm leading-relaxed text-slate-400">
+            Empowering students with world-class education and technology. Join us in shaping the future.
+          </p>
+          <div class="flex gap-4 pt-2">
+            <a href="#" class="p-2 bg-white/5 rounded-full hover:bg-blue-600 hover:text-white transition-all"><svg
+                class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
+              </svg></a>
+            <a href="#" class="p-2 bg-white/5 rounded-full hover:bg-blue-600 hover:text-white transition-all"><svg
+                class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+              </svg></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-white font-semibold mb-6">Quick Links</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Academic Calendar</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Exam Schedule</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Library</a></li>
+            <li><a href="#" class="hover:text-blue-400 transition-colors">Student Portal</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact & Map -->
+        <div>
+          <h3 class="text-white font-semibold mb-6">Contact Us</h3>
+          <div class="space-y-4 text-sm">
+            <div class="flex gap-3">
+              <svg class="w-5 h-5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>Invertis University<br>Bareilly, India, 243123</span>
+            </div>
+            <div class="flex gap-3">
+              <svg class="w-5 h-5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+              <a href="mailto:contact@invertis.org" class="hover:text-blue-400">contact@invertis.org</a>
+            </div>
+          </div>
+          <div class="mt-6 rounded-lg overflow-hidden border border-slate-700">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3513.211970321367!2d79.49041837620453!3d28.291902375852302!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39a0023f8a1f8cdd%3A0x5b10af261bf34c99!2sInvertis%20University%2C%20Bareilly%20-Top%20University%20In%20Uttar%20Pradesh%20(U.P)!5e0!3m2!1sen!2sin!4v1742798743127!5m2!1sen!2sin"
+              width="100%" height="150" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-12 pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
+        &copy; 2025 Invertis University. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>

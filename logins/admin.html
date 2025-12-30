@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <title>Admin Login | Invertis LMS</title>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-900 min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+
+    <!-- Background Decoration -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute w-96 h-96 bg-amber-500/10 rounded-full blur-3xl -top-20 -left-20"></div>
+        <div class="absolute w-96 h-96 bg-blue-600/10 rounded-full blur-3xl -bottom-20 -right-20"></div>
+    </div>
+
+    <!-- Login Card -->
+    <div class="glass-panel w-full max-w-md p-8 rounded-2xl shadow-2xl relative z-10 animate-fade-in-up">
+
+        <div class="text-center mb-8">
+            <img src="../images/footer_logo.png" alt="Invertis" class="h-10 mx-auto mb-4 brightness-0 invert">
+            <h1 class="text-2xl font-bold text-white">Admin Portal</h1>
+            <p class="text-slate-400 mt-2">Restricted access area.</p>
+        </div>
+
+        <form id="loginForm" class="space-y-6">
+            <div>
+                <label for="admin-id" class="block text-sm font-medium text-slate-300 mb-1">Admin ID</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </span>
+                    <input type="text" id="admin-id" required
+                        class="w-full pl-10 pr-4 py-2.5 bg-slate-800/50 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition-all text-white placeholder-slate-600"
+                        placeholder="Admin User">
+                </div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium text-slate-300 mb-1">Password</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-500">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+                            </path>
+                        </svg>
+                    </span>
+                    <input type="password" id="password" required
+                        class="w-full pl-10 pr-4 py-2.5 bg-slate-800/50 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition-all text-white placeholder-slate-600"
+                        placeholder="••••••••">
+                </div>
+            </div>
+
+            <button type="submit"
+                class="w-full py-3 px-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-lg shadow-lg shadow-orange-900/20 transition-all transform active:scale-95">
+                Authenticate
+            </button>
+        </form>
+
+        <div class="mt-6 text-center text-xs text-slate-500">
+            Authorized Personnel Only
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            btn.innerText = 'Verifying Credentials...';
+            btn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                window.location.href = '../admin/dashboard.html';
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

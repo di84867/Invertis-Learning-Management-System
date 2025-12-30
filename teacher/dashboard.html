@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard | Invertis LMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/data-store.js"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 h-screen flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col">
+        <div class="h-16 flex items-center px-6 border-b border-slate-800">
+            <span class="text-xl font-bold">Invertis<span class="text-blue-500">Faculty</span></span>
+        </div>
+        <nav class="flex-1 py-6 space-y-1">
+            <a href="#" onclick="showSection('dashboard')"
+                class="block px-6 py-3 hover:bg-slate-800 border-l-4 border-blue-500 bg-slate-800">Dashboard</a>
+            <a href="#" onclick="showSection('create')"
+                class="block px-6 py-3 hover:bg-slate-800 border-l-4 border-transparent">Create Assessment</a>
+            <a href="#" onclick="showSection('grading')"
+                class="block px-6 py-3 hover:bg-slate-800 border-l-4 border-transparent">Grading</a>
+        </nav>
+        <div class="p-4 border-t border-slate-800">
+            <a href="../index.html"
+                class="flex items-center text-slate-400 hover:text-white transition-colors">Logout</a>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 overflow-y-auto p-8">
+
+        <!-- SECTION: Dashboard -->
+        <div id="dashboard-section">
+            <h1 class="text-2xl font-bold text-slate-800 mb-6">Faculty Dashboard</h1>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-slate-500 text-sm font-medium">Total Students</h3>
+                    <p class="text-3xl font-bold text-slate-800 mt-2">128</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-slate-500 text-sm font-medium">Pending Grading</h3>
+                    <p class="text-3xl font-bold text-orange-600 mt-2">14</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-slate-500 text-sm font-medium">Active Assignments</h3>
+                    <p class="text-3xl font-bold text-blue-600 mt-2">5</p>
+                </div>
+            </div>
+
+            <h3 class="font-bold text-slate-800 mb-4">Your Courses</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Course Cards -->
+                <div class="bg-white border border-slate-200 rounded-lg p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 bg-blue-100 rounded-lg text-blue-600 font-bold">CN</div>
+                    </div>
+                    <h4 class="font-bold text-slate-800">Computer Networks</h4>
+                    <p class="text-sm text-slate-500">CS-301 • 3rd Year</p>
+                </div>
+                <div class="bg-white border border-slate-200 rounded-lg p-5">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-2 bg-purple-100 rounded-lg text-purple-600 font-bold">CD</div>
+                    </div>
+                    <h4 class="font-bold text-slate-800">Compiler Design</h4>
+                    <p class="text-sm text-slate-500">CS-302 • 3rd Year</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION: Create -->
+        <div id="create-section" class="hidden">
+            <h1 class="text-2xl font-bold text-slate-800 mb-6">Create New Assessment</h1>
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 max-w-2xl">
+                <form id="createForm" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Type</label>
+                            <select name="type" class="w-full p-2 border rounded-lg bg-gray-50"
+                                onchange="toggleCategory(this.value)">
+                                <option value="assignment">Assignment</option>
+                                <option value="quiz">Quiz</option>
+                            </select>
+                        </div>
+                        <div id="category-container">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Category</label>
+                            <select name="category" class="w-full p-2 border rounded-lg bg-gray-50">
+                                <option value="general">General Assignment</option>
+                                <option value="lab">Lab Practical</option>
+                                <option value="midterm">Mid Term Exam</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Subject</label>
+                            <select name="subjectId" class="w-full p-2 border rounded-lg bg-gray-50">
+                                <option value="CN">Computer Networks</option>
+                                <option value="CD">Compiler Design</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Title</label>
+                        <input type="text" name="title" required class="w-full p-2 border rounded-lg"
+                            placeholder="e.g. Unit 3 Quiz">
+                    </div>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Max Marks</label>
+                            <input type="number" name="maxMarks" value="100" class="w-full p-2 border rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Due Date</label>
+                            <input type="date" name="dueDate" class="w-full p-2 border rounded-lg">
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                        class="w-full py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">Publish
+                        Assessment</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- SECTION: Grading -->
+        <div id="grading-section" class="hidden">
+            <h1 class="text-2xl font-bold text-slate-800 mb-6">Student Grading</h1>
+
+            <!-- Main Tabs -->
+            <div class="flex border-b border-gray-200 mb-6">
+                <button onclick="switchGradingTab('assignments')" id="tab-assignments"
+                    class="px-6 py-2 border-b-2 border-blue-600 text-blue-600 font-bold focus:outline-none">Assignments</button>
+                <button onclick="switchGradingTab('quizzes')" id="tab-quizzes"
+                    class="px-6 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-700 font-medium focus:outline-none">Quizzes</button>
+            </div>
+
+            <!-- Assignments Container -->
+            <div id="view-assignments">
+
+                <!-- Lab Section -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-700 mb-3 border-l-4 border-purple-500 pl-3">Lab Practicals
+                    </h3>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                <tr>
+                                    <th class="px-6 py-3">Student</th>
+                                    <th class="px-6 py-3">Title</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gradingTable-lab"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- MidTerm Section -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-700 mb-3 border-l-4 border-orange-500 pl-3">Mid Term
+                        Examinations</h3>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                <tr>
+                                    <th class="px-6 py-3">Student</th>
+                                    <th class="px-6 py-3">Title</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gradingTable-midterm"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- General Section -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-bold text-slate-700 mb-3 border-l-4 border-gray-500 pl-3">General
+                        Assignments</h3>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                <tr>
+                                    <th class="px-6 py-3">Student</th>
+                                    <th class="px-6 py-3">Title</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="gradingTable-general"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Quizzes Container -->
+            <div id="view-quizzes" class="hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <table class="w-full text-sm text-left">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                            <tr>
+                                <th class="px-6 py-3">Student</th>
+                                <th class="px-6 py-3">Quiz Title</th>
+                                <th class="px-6 py-3">Status</th>
+                                <th class="px-6 py-3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gradingTable-quiz"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Grading Modal -->
+    <div id="gradingModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-lg w-96">
+            <h3 class="text-lg font-bold mb-4">Enter Marks</h3>
+            <input type="hidden" id="modalAssignId">
+            <input type="hidden" id="modalStudentId">
+            <div class="mb-4">
+                <label class="block text-sm mb-1">Marks Obtained</label>
+                <input type="number" id="gradeInput" class="w-full border p-2 rounded">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm mb-1">Remarks</label>
+                <input type="text" id="remarkInput" class="w-full border p-2 rounded">
+            </div>
+            <div class="flex justify-end gap-2">
+                <button onclick="closeModal()" class="px-4 py-2 border rounded">Cancel</button>
+                <button onclick="submitGrade()" class="px-4 py-2 bg-blue-600 text-white rounded">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            ['dashboard', 'create', 'grading'].forEach(s => {
+                document.getElementById(s + '-section').classList.add('hidden');
+            });
+            document.getElementById(sectionId + '-section').classList.remove('hidden');
+            if (sectionId === 'grading') loadGradingTable();
+        }
+
+        function toggleCategory(type) {
+            const container = document.getElementById('category-container');
+            if (type === 'assignment') {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+        // Initialize Call
+        toggleCategory('assignment'); // Default state
+
+        function switchGradingTab(tab) {
+            document.getElementById('view-assignments').classList.add('hidden');
+            document.getElementById('view-quizzes').classList.add('hidden');
+            document.getElementById('view-' + tab).classList.remove('hidden');
+
+            const btnAssign = document.getElementById('tab-assignments');
+            const btnQuiz = document.getElementById('tab-quizzes');
+
+            if (tab === 'assignments') {
+                btnAssign.classList.add('border-blue-600', 'text-blue-600');
+                btnAssign.classList.remove('border-transparent', 'text-slate-500');
+                btnQuiz.classList.add('border-transparent', 'text-slate-500');
+                btnQuiz.classList.remove('border-blue-600', 'text-blue-600');
+            } else {
+                btnQuiz.classList.add('border-blue-600', 'text-blue-600');
+                btnQuiz.classList.remove('border-transparent', 'text-slate-500');
+                btnAssign.classList.add('border-transparent', 'text-slate-500');
+                btnAssign.classList.remove('border-blue-600', 'text-blue-600');
+            }
+        }
+
+        document.getElementById('createForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Clean up: if quiz, category is 'quiz' implicitly
+            if (data.type === 'quiz') data.category = 'quiz';
+
+            LMS_DB.createAssignment(data);
+            alert('Assessment Created Successfully!');
+            e.target.reset();
+            toggleCategory('assignment'); // Reset UI
+        });
+
+        function loadGradingTable() {
+            const assignments = LMS_DB.getAssignments();
+            const users = LMS_DB.getUsers();
+
+            // Mock Logged In Teacher (Dr. Smith, CS Dept)
+            // In real app, get from session
+            const currentTeacher = users.find(u => u.id === 'T001');
+
+            // Filter Students: Must match Teacher's Dept & Branch
+            // AND (Optional) matches year/section if assignments were specific, but for now just Dept/Branch
+            const myStudents = users.filter(u =>
+                u.role === 'student' &&
+                u.dept === currentTeacher.dept &&
+                u.branch === currentTeacher.branch
+            );
+
+            // Clear all tables
+            ['gradingTable-lab', 'gradingTable-midterm', 'gradingTable-general', 'gradingTable-quiz'].forEach(id => {
+                document.getElementById(id).innerHTML = '';
+            });
+
+            assignments.forEach(assign => {
+                // Determine target table
+                let targetId = 'gradingTable-general';
+                if (assign.type === 'quiz') targetId = 'gradingTable-quiz';
+                else if (assign.category === 'lab') targetId = 'gradingTable-lab';
+                else if (assign.category === 'midterm') targetId = 'gradingTable-midterm';
+
+                const tableRef = document.getElementById(targetId);
+                const isLocked = assign.isLocked === true;
+
+                // For each valid student, create a row
+                myStudents.forEach(student => {
+                    const subs = LMS_DB.getSubmissions();
+                    const sub = subs.find(s => s.assignmentId === assign.id && s.studentId === student.id);
+                    const isGraded = sub && sub.status === 'graded';
+
+                    const tr = document.createElement('tr');
+                    tr.className = "bg-white border-b hover:bg-gray-50";
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 font-medium text-slate-900">
+                            <div class="flex items-center gap-3">
+                                <img src="${student.avatar}" class="w-8 h-8 rounded-full">
+                                <div>
+                                    <div>${student.name}</div>
+                                    <div class="text-xs text-slate-500 font-normal">${student.year}rd Year - Sec ${student.section}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="font-medium">${assign.title}</div>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-xs text-slate-500 uppercase">${assign.type === 'quiz' ? 'Quiz' : (assign.category || 'General')}</span>
+                                <span class="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded border border-gray-200">Due: ${assign.dueDate || 'No Date'}</span>
+                            </div>
+                            ${isLocked ? '<span class="text-xs text-red-500 font-bold flex items-center gap-1 mt-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> LOCKED</span>' : ''}
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-col gap-1">
+                                ${isGraded
+                            ? `<span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded w-fit">Graded: ${sub.marksObtained}/${assign.maxMarks}</span>`
+                            : '<span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded w-fit">Pending</span>'
+                        }
+                                ${sub && sub.submittedUrl ? `<a href="${sub.submittedUrl}" target="_blank" class="text-xs text-blue-600 hover:underline flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> View Submission</a>` : ''}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="flex flex-col gap-2">
+                                <button onclick="openGradeModal('${assign.id}', '${student.id}')" class="text-blue-600 hover:underline text-sm font-medium text-left">
+                                    ${isGraded ? 'Edit Marks' : 'Grade Student'}
+                                </button>
+                                <div class="border-t pt-1 mt-1">
+                                    ${isLocked
+                            ? `<button onclick="toggleLock('${assign.id}', false)" class="text-green-600 hover:bg-green-50 px-2 py-1 rounded text-xs w-full text-left flex items-center gap-1">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg> Unlock Assignment
+                                        </button>`
+                            : `<button onclick="toggleLock('${assign.id}', true)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs w-full text-left flex items-center gap-1">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> Lock Assignment
+                                        </button>`
+                        }
+                                </div>
+                            </div>
+                        </td>
+                    `;
+                    if (tableRef) tableRef.appendChild(tr);
+                });
+            });
+        }
+
+        function toggleLock(aid, status) {
+            if (confirm(status ? 'Lock this assignment? Students wont be able to submit.' : 'Unlock this assignment?')) {
+                LMS_DB.toggleLock(aid, status);
+                loadGradingTable();
+            }
+        }
+
+        function openGradeModal(assignId, studentId) {
+            document.getElementById('modalAssignId').value = assignId;
+            document.getElementById('modalStudentId').value = studentId;
+            document.getElementById('gradingModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('gradingModal').classList.add('hidden');
+        }
+
+        function submitGrade() {
+            const aid = document.getElementById('modalAssignId').value;
+            const sid = document.getElementById('modalStudentId').value;
+            const marks = document.getElementById('gradeInput').value;
+            const rem = document.getElementById('remarkInput').value;
+
+            LMS_DB.gradeSubmission(aid, sid, marks, rem);
+            closeModal();
+            loadGradingTable();
+        }
+    </script>
+</body>
+
+</html>

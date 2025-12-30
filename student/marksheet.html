@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Card | Invertis University</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../js/data-store.js"></script>
+    <script>
+        tailwind.config = {
+            theme: { extend: { fontFamily: { sans: ['Outfit', 'sans-serif'] } } }
+        }
+    </script>
+    <style>
+        @media print {
+            .no-print {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .print-border {
+                border: 2px solid #000;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 p-8 min-h-screen">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-xl overflow-hidden print-border" id="marksheet">
+
+        <!-- Header -->
+        <header class="bg-slate-900 text-white p-8 border-b-4 border-amber-500">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <img src="../images/footer_logo.png" class="h-12 brightness-0 invert" alt="Logo">
+                    <div>
+                        <h1 class="text-3xl font-bold uppercase tracking-wide">Invertis University</h1>
+                        <p class="text-slate-400 text-sm">Statement of Internal Assessment</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-slate-400">Date Generated</p>
+                    <p class="font-mono font-bold text-lg" id="genDate">--</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Student Profile -->
+        <div class="p-8 bg-slate-50 border-b border-gray-200">
+            <div class="flex items-start gap-8">
+                <div class="w-32 h-32 bg-gray-200 rounded-lg overflow-hidden border-4 border-white shadow-md">
+                    <img id="studentPhoto" src="" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1 grid grid-cols-2 gap-y-4 gap-x-8">
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase font-bold">Student Name</p>
+                        <p class="text-xl font-bold text-slate-900" id="studentName">--</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase font-bold">Student ID</p>
+                        <p class="text-lg text-slate-800 font-mono" id="studentId">--</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase font-bold">Course / Department</p>
+                        <p class="text-slate-800" id="studentCourse">--</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase font-bold">Semester / Section</p>
+                        <p class="text-slate-800" id="studentSem">--</p>
+                    </div>
+                </div>
+                <div class="text-center bg-white p-4 rounded-lg shadow-sm w-32">
+                    <p class="text-xs text-slate-500 font-bold mb-1">Percentage</p>
+                    <div class="text-3xl font-bold text-blue-600" id="totalPercentage">0%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marks Table -->
+        <div class="p-8">
+            <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-blue-600 pl-3">Detailed Performance</h3>
+
+            <table class="w-full text-sm text-left border border-gray-200">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                    <tr>
+                        <th class="px-6 py-3 border-b">Subject / Assessment</th>
+                        <th class="px-6 py-3 border-b">Type</th>
+                        <th class="px-6 py-3 border-b text-center">Max Marks</th>
+                        <th class="px-6 py-3 border-b text-center">Obtained</th>
+                        <th class="px-6 py-3 border-b text-right">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="marksBody">
+                    <!-- Populated via JS -->
+                </tbody>
+                <tfoot class="bg-slate-50 font-bold text-slate-900">
+                    <tr>
+                        <td colspan="2" class="px-6 py-4 text-right">GRAND TOTAL</td>
+                        <td class="px-6 py-4 text-center" id="grandMax">0</td>
+                        <td class="px-6 py-4 text-center text-blue-600" id="grandObtained">0</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="mt-8 grid grid-cols-2 gap-8">
+                <div class="border p-4 rounded bg-green-50 border-green-200">
+                    <h4 class="font-bold text-green-800 mb-2">Final Result Status</h4>
+                    <p class="text-2xl font-bold text-green-600" id="finalResult">PASS</p>
+                </div>
+                <!-- Signature Area -->
+                <div class="flex flex-col justify-end items-end pt-10">
+                    <div class="h-16 w-32 border-b-2 border-slate-900 mb-2">
+                        <!-- Digital Sig Image could go here -->
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ec/Signature_sample.svg"
+                            class="h-12 opacity-50">
+                    </div>
+                    <p class="text-xs font-bold uppercase">Controller of Examinations</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-slate-100 p-4 text-center text-xs text-slate-500 border-t border-gray-200">
+            This is a computer-generated document. No physical signature is required. | Invertis LMS v1.0
+        </footer>
+
+    </div>
+
+    <div class="max-w-4xl mx-auto mt-8 flex justify-end gap-4 no-print">
+        <button onclick="window.location.href='dashboard.html'"
+            class="px-6 py-2 bg-gray-600 text-white rounded shadow hover:bg-gray-700">Back to Dashboard</button>
+        <button onclick="window.print()"
+            class="px-6 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 font-bold flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                </path>
+            </svg>
+            Print Marksheet
+        </button>
+    </div>
+
+    <script>
+        document.getElementById('genDate').innerText = new Date().toLocaleDateString();
+
+        // Load Data
+        const currentUser = LMS_DB.getUsers().find(u => u.role === 'student'); // Demo User
+
+        // Profile
+        document.getElementById('studentName').innerText = currentUser.name;
+        document.getElementById('studentId').innerText = currentUser.id;
+        document.getElementById('studentCourse').innerText = `${currentUser.dept} (${currentUser.branch})`;
+        document.getElementById('studentSem').innerText = `Year: ${currentUser.year} | Sec: ${currentUser.section}`;
+        document.getElementById('studentPhoto').src = currentUser.avatar;
+
+        // Marks
+        const results = LMS_DB.getStudentResults(currentUser.id);
+        const marksBody = document.getElementById('marksBody');
+
+        let totalMax = 0;
+        let totalObt = 0;
+
+        results.forEach(item => {
+            const isGraded = item.status === 'graded';
+            const obtainDisplay = isGraded ? item.marksObtained : '-';
+            const remarkDisplay = isGraded ? item.remarks : (item.submitted ? 'Submitted, Pending' : 'Not Submitted');
+
+            // Only count towards total if graded (or count as 0 if we want stricter logic, but let's do progressive)
+            if (isGraded) {
+                totalMax += parseFloat(item.maxMarks);
+                totalObt += parseFloat(item.marksObtained);
+            }
+
+            const tr = document.createElement('tr');
+            tr.className = "border-b bg-white";
+            tr.innerHTML = `
+                <td class="px-6 py-4 font-medium text-slate-900">${item.title} (${item.subjectId})</td>
+                <td class="px-6 py-4 capitalize">${item.type}</td>
+                <td class="px-6 py-4 text-center">${item.maxMarks}</td>
+                <td class="px-6 py-4 text-center font-bold ${isGraded ? 'text-slate-800' : 'text-gray-400'}">${obtainDisplay}</td>
+                <td class="px-6 py-4 text-right text-xs text-slate-500 italic">${remarkDisplay}</td>
+            `;
+            marksBody.appendChild(tr);
+        });
+
+        document.getElementById('grandMax').innerText = totalMax;
+        document.getElementById('grandObtained').innerText = totalObt;
+
+        const percentage = totalMax > 0 ? ((totalObt / totalMax) * 100).toFixed(1) : 0;
+        document.getElementById('totalPercentage').innerText = percentage + '%';
+
+        const resultStatus = document.getElementById('finalResult');
+        if (percentage >= 40) {
+            resultStatus.innerText = "PASS";
+            resultStatus.className = "text-2xl font-bold text-green-600";
+        } else {
+            resultStatus.innerText = "FAIL";
+            resultStatus.className = "text-2xl font-bold text-red-600";
+        }
+
+    </script>
+</body>
+
+</html>
