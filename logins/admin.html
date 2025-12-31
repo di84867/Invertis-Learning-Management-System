@@ -45,8 +45,9 @@
     <div class="glass-panel w-full max-w-md p-8 rounded-2xl shadow-2xl relative z-10 animate-fade-in-up">
 
         <div class="text-center mb-8">
-            <img src="../images/footer_logo.png" alt="Invertis" class="h-10 mx-auto mb-4 brightness-0 invert">
-            <h1 class="text-2xl font-bold text-white">Admin Portal</h1>
+            <img src="../images/logo.png" alt="Invertis"
+                class="h-16 w-16 mx-auto mb-4 rounded-full object-cover bg-white shadow-md">
+            <h1 class="text-2xl font-bold text-white">Admin Login</h1>
             <p class="text-slate-400 mt-2">Restricted access area.</p>
         </div>
 
@@ -91,18 +92,29 @@
         <div class="mt-6 text-center text-xs text-slate-500">
             Authorized Personnel Only
         </div>
+        <p class="text-center text-slate-500 text-xs mt-6">Developed by Divyansh Singh</p>
     </div>
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
             const btn = this.querySelector('button[type="submit"]');
+            const id = document.getElementById('admin-id').value;
+            const pass = document.getElementById('password').value;
+
             btn.innerText = 'Verifying Credentials...';
             btn.disabled = true;
 
-            // Simulate API call
             setTimeout(() => {
-                window.location.href = '../admin/dashboard.html';
+                if (id === 'admin' && pass === 'admin123') {
+                    // Set a session flag
+                    localStorage.setItem('adminSession', 'true');
+                    window.location.href = '../admin/dashboard.html';
+                } else {
+                    alert('Invalid Admin Credentials!');
+                    btn.innerText = 'Authenticate';
+                    btn.disabled = false;
+                }
             }, 1000);
         });
     </script>

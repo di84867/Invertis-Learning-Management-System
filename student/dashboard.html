@@ -15,11 +15,31 @@
     </script>
 </head>
 
-<body class="bg-gray-50 h-screen flex">
+<body class="bg-gray-50 h-screen flex overflow-hidden">
+
+    <!-- Mobile Header -->
+    <div
+        class="lg:hidden fixed top-0 w-full bg-blue-900 shadow-lg z-50 flex items-center justify-between px-4 h-16 text-white">
+        <div class="flex items-center gap-2">
+            <img src="../images/logo.png" class="h-8 w-8 rounded-full bg-white p-0.5" alt="Logo">
+            <span class="font-bold">Invertis<span class="text-blue-300">LMS</span></span>
+        </div>
+        <button id="sidebarToggle" class="p-2 hover:bg-blue-800 rounded-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                </path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-blue-900 text-white flex flex-col">
-        <div class="h-16 flex items-center px-6 border-b border-blue-800">
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 w-64 bg-blue-900 text-white flex flex-col z-50 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-300 ease-in-out">
+        <div class="h-16 flex items-center px-6 border-b border-blue-800 gap-3">
+            <img src="../images/logo.png" class="h-10 w-10 rounded-full object-cover bg-white p-0.5" alt="Logo">
             <span class="text-xl font-bold">Invertis<span class="text-blue-300">LMS</span></span>
         </div>
 
@@ -40,15 +60,19 @@
                 class="block px-6 py-3 hover:bg-blue-800 border-l-4 border-transparent">Assignments & Quizzes</a>
             <a href="marksheet.html" class="block px-6 py-3 hover:bg-blue-800 border-l-4 border-transparent">Internal
                 Result</a>
+            <a href="#" onclick="showTab('settings')"
+                class="block px-6 py-3 hover:bg-blue-800 border-l-4 border-transparent">Profile & Settings</a>
         </nav>
         <div class="p-4 border-t border-blue-800">
             <a href="../index.html"
-                class="flex items-center text-blue-300 hover:text-white transition-colors">Logout</a>
+                class="flex items-center text-blue-300 hover:text-white transition-colors mb-2">Logout</a>
+            <p class="text-[10px] text-blue-400 opacity-50 uppercase tracking-widest mt-4">Developed by Divyansh Singh
+            </p>
         </div>
     </aside>
 
     <!-- Main -->
-    <main class="flex-1 overflow-y-auto p-8">
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 pt-20 lg:pt-8">
 
         <!-- Dashboard Tab -->
         <div id="dashboard-tab">
@@ -102,22 +126,121 @@
             </div>
         </div>
 
+        <!-- Settings Tab -->
+        <div id="settings-tab" class="hidden">
+            <h1 class="text-2xl font-bold text-slate-800 mb-6">Profile & Settings</h1>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Change Avatar -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">Profile Picture</h3>
+                    <div class="flex flex-col items-center">
+                        <img id="settingAvatar" src=""
+                            class="w-24 h-24 rounded-full border-4 border-blue-50 mb-4 object-cover">
+                        <input type="file" id="avatarInput" class="hidden" accept="image/*">
+                        <button onclick="document.getElementById('avatarInput').click()"
+                            class="text-sm bg-blue-50 text-blue-600 px-4 py-2 rounded-lg font-medium hover:bg-blue-100 mb-2">
+                            Upload New Picture
+                        </button>
+                        <p class="text-xs text-slate-400">Max size 10 KB. Formats: JPG, PNG.</p>
+                    </div>
+                </div>
+
+                <!-- Change Password -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h3 class="text-lg font-bold text-slate-800 mb-4">Change Password</h3>
+                    <form id="changePassForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Current Password</label>
+                            <input type="password" name="oldPass" required class="w-full border p-2 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">New Password</label>
+                            <input type="password" name="newPass" required class="w-full border p-2 rounded-lg">
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">Update
+                            Password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <script>
         function showTab(tabId) {
             document.getElementById('dashboard-tab').classList.add('hidden');
             document.getElementById('assessments-tab').classList.add('hidden');
+            document.getElementById('settings-tab').classList.add('hidden');
             document.getElementById(tabId + '-tab').classList.remove('hidden');
         }
 
+        // Settings Logic
+        const avatarInput = document.getElementById('avatarInput');
+        const settingAvatar = document.getElementById('settingAvatar');
+
+        avatarInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Check Size 10 KB = 10 * 1024
+            if (file.size > 10240) {
+                alert('File is too large! Maximum allowed is 10 KB.');
+                e.target.value = ''; // clear
+                return;
+            }
+
+            // Preview & "Save" (Mock)
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                const newSrc = ev.target.result;
+                settingAvatar.src = newSrc;
+                document.getElementById('sideAvatar').src = newSrc;
+
+                // Update User
+                currentUser.avatar = newSrc;
+                LMS_DB.updateUser(currentUser);
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                alert('Profile Picture Updated!');
+            }
+            reader.readAsDataURL(file);
+        });
+
+        document.getElementById('changePassForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const oldPass = e.target.oldPass.value;
+            const newPass = e.target.newPass.value;
+
+            if (LMS_DB.changePassword(currentUser.id, oldPass, newPass)) {
+                alert('Password Changed Successfully! Please login again completely to verify.');
+                e.target.reset();
+                // Optionally logout
+            } else {
+                alert('Incorrect Old Password!');
+            }
+        });
+
         // Init Data
-        const currentUser = LMS_DB.getUsers().find(u => u.role === 'student'); // Demo
+        // Init Data
+        let currentUser = null;
+        try {
+            currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        } catch (e) { }
+
+        if (!currentUser) {
+            currentUser = LMS_DB.getUsers().find(u => u.role === 'student');
+        }
 
         // Sidebar Data
         document.getElementById('sideAvatar').src = currentUser.avatar;
         document.getElementById('sideName').innerText = currentUser.name;
         document.getElementById('sideId').innerText = currentUser.id;
+
+        // Settings Data
+        if (document.getElementById('settingAvatar')) {
+            document.getElementById('settingAvatar').src = currentUser.avatar;
+        }
 
         const results = LMS_DB.getStudentResults(currentUser.id);
         const courses = LMS_DB.getCourses();
@@ -171,7 +294,7 @@
                 actionBtn = '<span class="text-slate-400 italic">Review Pending</span>';
             } else {
                 statusBadge = '<span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs">Pending</span>';
-                actionBtn = `<a href="../Assignments/Assignment.html?id=${item.id}" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">Submit Now</a>`;
+                actionBtn = `<a href="assignment.html?id=${item.id}" class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">Submit Now</a>`;
             }
 
             const tr = document.createElement('tr');
@@ -187,6 +310,32 @@
             table.appendChild(tr);
         });
 
+        // Sidebar Toggle Mobile
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            if (isOpen) {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+                sidebarOverlay.classList.remove('hidden');
+            }
+        }
+
+        sidebarToggle.onclick = toggleSidebar;
+        sidebarOverlay.onclick = toggleSidebar;
+
+        // Auto-close on tab click (mobile)
+        const navLinks = sidebar.querySelectorAll('a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) toggleSidebar();
+            });
+        });
     </script>
 </body>
 

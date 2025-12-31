@@ -30,7 +30,7 @@
     </style>
 </head>
 
-<body class="bg-gray-100 p-8 min-h-screen">
+<body class="bg-gray-100 p-4 md:p-8 min-h-screen">
 
     <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-xl overflow-hidden print-border" id="marksheet">
 
@@ -38,7 +38,8 @@
         <header class="bg-slate-900 text-white p-8 border-b-4 border-amber-500">
             <div class="flex justify-between items-center">
                 <div class="flex items-center gap-4">
-                    <img src="../images/footer_logo.png" class="h-12 brightness-0 invert" alt="Logo">
+                    <img src="../images/logo.png" class="h-14 w-14 rounded-full object-cover bg-white p-1 shadow-sm"
+                        alt="Logo">
                     <div>
                         <h1 class="text-3xl font-bold uppercase tracking-wide">Invertis University</h1>
                         <p class="text-slate-400 text-sm">Statement of Internal Assessment</p>
@@ -52,12 +53,13 @@
         </header>
 
         <!-- Student Profile -->
-        <div class="p-8 bg-slate-50 border-b border-gray-200">
-            <div class="flex items-start gap-8">
-                <div class="w-32 h-32 bg-gray-200 rounded-lg overflow-hidden border-4 border-white shadow-md">
+        <div class="p-4 md:p-8 bg-slate-50 border-b border-gray-200">
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
+                <div
+                    class="w-32 h-32 bg-gray-200 rounded-lg overflow-hidden border-4 border-white shadow-md flex-shrink-0">
                     <img id="studentPhoto" src="" class="w-full h-full object-cover">
                 </div>
-                <div class="flex-1 grid grid-cols-2 gap-y-4 gap-x-8">
+                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 text-center md:text-left w-full">
                     <div>
                         <p class="text-xs text-slate-500 uppercase font-bold">Student Name</p>
                         <p class="text-xl font-bold text-slate-900" id="studentName">--</p>
@@ -75,7 +77,7 @@
                         <p class="text-slate-800" id="studentSem">--</p>
                     </div>
                 </div>
-                <div class="text-center bg-white p-4 rounded-lg shadow-sm w-32">
+                <div class="text-center bg-white p-4 rounded-lg shadow-sm w-32 border border-slate-100">
                     <p class="text-xs text-slate-500 font-bold mb-1">Percentage</p>
                     <div class="text-3xl font-bold text-blue-600" id="totalPercentage">0%</div>
                 </div>
@@ -83,31 +85,33 @@
         </div>
 
         <!-- Marks Table -->
-        <div class="p-8">
+        <div class="p-4 md:p-8">
             <h3 class="text-lg font-bold text-slate-800 mb-4 border-l-4 border-blue-600 pl-3">Detailed Performance</h3>
 
-            <table class="w-full text-sm text-left border border-gray-200">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-100">
-                    <tr>
-                        <th class="px-6 py-3 border-b">Subject / Assessment</th>
-                        <th class="px-6 py-3 border-b">Type</th>
-                        <th class="px-6 py-3 border-b text-center">Max Marks</th>
-                        <th class="px-6 py-3 border-b text-center">Obtained</th>
-                        <th class="px-6 py-3 border-b text-right">Remarks</th>
-                    </tr>
-                </thead>
-                <tbody id="marksBody">
-                    <!-- Populated via JS -->
-                </tbody>
-                <tfoot class="bg-slate-50 font-bold text-slate-900">
-                    <tr>
-                        <td colspan="2" class="px-6 py-4 text-right">GRAND TOTAL</td>
-                        <td class="px-6 py-4 text-center" id="grandMax">0</td>
-                        <td class="px-6 py-4 text-center text-blue-600" id="grandObtained">0</td>
-                        <td></td>
-                    </tr>
-                </tfoot>
-            </table>
+            <div class="overflow-x-auto -mx-4 md:mx-0">
+                <table class="w-full text-sm text-left border border-gray-200 min-w-[600px]">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 border-b">Subject / Assessment</th>
+                            <th class="px-6 py-3 border-b">Type</th>
+                            <th class="px-6 py-3 border-b text-center">Max Marks</th>
+                            <th class="px-6 py-3 border-b text-center">Obtained</th>
+                            <th class="px-6 py-3 border-b text-right">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="marksBody">
+                        <!-- Populated via JS -->
+                    </tbody>
+                    <tfoot class="bg-slate-50 font-bold text-slate-900">
+                        <tr>
+                            <td colspan="2" class="px-6 py-4 text-right">GRAND TOTAL</td>
+                            <td class="px-6 py-4 text-center" id="grandMax">0</td>
+                            <td class="px-6 py-4 text-center text-blue-600" id="grandObtained">0</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
 
             <div class="mt-8 grid grid-cols-2 gap-8">
                 <div class="border p-4 rounded bg-green-50 border-green-200">
@@ -127,8 +131,8 @@
         </div>
 
         <!-- Footer -->
-        <footer class="bg-slate-100 p-4 text-center text-xs text-slate-500 border-t border-gray-200">
-            This is a computer-generated document. No physical signature is required. | Invertis LMS v1.0
+        <footer class="bg-slate-100 p-4 text-center text-[10px] text-slate-400 border-t border-gray-200">
+            Computer-generated statement. Developed by Divyansh Singh | Invertis LMS v1.0
         </footer>
 
     </div>
@@ -151,7 +155,16 @@
         document.getElementById('genDate').innerText = new Date().toLocaleDateString();
 
         // Load Data
-        const currentUser = LMS_DB.getUsers().find(u => u.role === 'student'); // Demo User
+        // Load Data
+        let currentUser = null;
+        try {
+            currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        } catch (e) { }
+
+        if (!currentUser) {
+            // Fallback for demo if no login happened
+            currentUser = LMS_DB.getUsers().find(u => u.role === 'student');
+        }
 
         // Profile
         document.getElementById('studentName').innerText = currentUser.name;
@@ -160,7 +173,24 @@
         document.getElementById('studentSem').innerText = `Year: ${currentUser.year} | Sec: ${currentUser.section}`;
         document.getElementById('studentPhoto').src = currentUser.avatar;
 
-        // Marks
+        if (!LMS_DB.getAppConfig().resultPublished) {
+            document.body.innerHTML = `
+                <div class="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+                    <div class="bg-white p-8 rounded-lg shadow-xl text-center max-w-md">
+                        <svg class="w-16 h-16 text-amber-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                        <h1 class="text-2xl font-bold text-slate-800 mb-2">Results Withheld</h1>
+                        <p class="text-slate-600">The Internal Assessment results have not been published by the administration yet.</p>
+                        <button onclick="window.location.href='dashboard.html'" class="mt-6 px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Back to Dashboard</button>
+                    </div>
+                </div>
+            `;
+            // Stop execution here if hidden
+            throw new Error("Results not published");
+        }
+
+        // Logic continues if published
         const results = LMS_DB.getStudentResults(currentUser.id);
         const marksBody = document.getElementById('marksBody');
 

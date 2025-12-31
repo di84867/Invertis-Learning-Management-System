@@ -48,8 +48,8 @@
     <div class="glass-panel w-full max-w-md p-8 rounded-2xl shadow-2xl relative z-10 animate-fade-in-up">
 
         <div class="text-center mb-8">
-            <img src="../images/footer_logo.png" alt="Invertis"
-                class="h-12 mx-auto mb-4 brightness-0 invert filter-none">
+            <img src="../images/logo.png" alt="Invertis"
+                class="h-16 w-16 mx-auto mb-4 rounded-full object-cover bg-white shadow-md">
             <h1 class="text-2xl font-bold text-slate-800">Teacher Login</h1>
             <p class="text-slate-500 mt-2">Access faculty portal & resources.</p>
         </div>
@@ -98,21 +98,41 @@
         <div class="mt-6 text-center text-sm text-slate-500">
             Support Issue? <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Contact IT</a>
         </div>
+        <p class="text-center text-slate-400 text-xs mt-6">Developed by Divyansh Singh</p>
     </div>
 
+    <script src="../js/data-store.js"></script>
     <script>
         document.getElementById('loginForm').addEventListener('submit', function (e) {
             e.preventDefault();
             const btn = this.querySelector('button[type="submit"]');
+            const idInput = document.getElementById('teacher-id').value.trim();
+            const passInput = document.getElementById('password').value.trim();
+
             const originalText = btn.innerText;
-            btn.innerText = 'Creating Session...';
+            btn.innerText = 'Verifying...';
             btn.disabled = true;
 
-            // Simulate API call
             setTimeout(() => {
-                // Redirect to dashboard (or teacher dashboard if it existed, but we'll use same index for now as mockup)
-                window.location.href = '../teacher/dashboard.html';
-            }, 1000);
+                const users = LMS_DB.getUsers();
+                // Find teacher
+                const user = users.find(u => u.id === idInput && u.password === passInput && u.role === 'teacher');
+
+                if (user) {
+                    if (user.isLocked) {
+                        alert('Your account is locked. Please contact the administrator.');
+                        btn.innerText = originalText;
+                        btn.disabled = false;
+                        return;
+                    }
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    window.location.href = '../teacher/dashboard.html';
+                } else {
+                    alert('Invalid Teacher ID or Password!');
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }, 800);
         });
     </script>
 </body>

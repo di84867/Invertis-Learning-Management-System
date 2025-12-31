@@ -43,7 +43,7 @@
     <div class="max-w-3xl mx-auto">
         <!-- Breadcrumb -->
         <nav class="flex mb-8 text-sm text-slate-500">
-            <a href="../index.html" class="hover:text-blue-600 transition-colors">Dashboard</a>
+            <a href="dashboard.html" class="hover:text-blue-600 transition-colors">Dashboard</a>
             <span class="mx-2">/</span>
             <span class="text-slate-800 font-medium">Assignment Submission</span>
         </nav>
@@ -127,19 +127,57 @@
             </div>
             <h3 class="text-xl font-bold text-center text-slate-800 mb-2">Submission Successful!</h3>
             <p class="text-center text-slate-500 mb-6">Your assignment has been uploaded safely.</p>
-            <button onclick="window.location.href='../index.html'"
+            <button onclick="window.location.href='dashboard.html'"
                 class="w-full py-2.5 bg-green-600 text-white font-medium rounded-lg hover:bg-green-500 transition-colors">
                 Back to Dashboard
             </button>
         </div>
     </div>
 
+    <script src="../js/data-store.js"></script>
     <script>
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-input');
         const fileList = document.getElementById('file-list');
         const submitBtn = document.getElementById('submit-btn');
         let files = [];
+
+        // Load Assignment Details
+        const urlParams = new URLSearchParams(window.location.search);
+        const assignId = urlParams.get('id');
+        const assignmentNameEl = document.querySelector('h1.text-2xl');
+
+        if (assignId) {
+            const assignments = LMS_DB.getAssignments();
+            const assign = assignments.find(a => a.id == assignId); // weak equality for string/int match
+            if (assign) {
+                assignmentNameEl.innerText = `Submit: ${assign.title}`;
+
+                // Check Lock Status
+                if (assign.isLocked) {
+                    alert('This assignment is locked by the instructor.');
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = 'Assignment Locked';
+                    dropZone.style.pointerEvents = 'none';
+                    dropZone.style.opacity = '0.5';
+                } else if (assign.dueDate) {
+                    // Check Due Date
+                    const now = new Date();
+                    const due = new Date(assign.dueDate);
+                    // Add 23:59:59 to due date if it's just a date string for leniency, or assume midnight
+                    // Just direct comparison for now
+                    if (now > due) {
+                        alert('The deadline for this assignment has passed.');
+                        submitBtn.disabled = true;
+                        submitBtn.innerText = 'Deadline Passed';
+                        dropZone.style.pointerEvents = 'none';
+                        dropZone.style.opacity = '0.5';
+                    }
+                }
+            } else {
+                alert('Assignment not found!');
+            }
+        }
 
         // Drag & Drop handlers
         dropZone.addEventListener('dragover', (e) => {
@@ -163,9 +201,22 @@
 
         function handleFiles(newFiles) {
             if (newFiles.length > 0) {
-                files = [...files, ...Array.from(newFiles)];
-                renderFiles();
-                fileList.classList.remove('hidden');
+                const validFiles = [];
+                Array.from(newFiles).forEach(file => {
+                    // Check File Size (500MB Limit)
+                    // 500 * 1024 * 1024 bytes
+                    if (file.size > 524288000) {
+                        alert(`File ${file.name} exceeds the 500MB limit.`);
+                    } else {
+                        validFiles.push(file);
+                    }
+                });
+
+                if (validFiles.length > 0) {
+                    files = [...files, ...validFiles];
+                    renderFiles();
+                    fileList.classList.remove('hidden');
+                }
             }
         }
 
@@ -212,8 +263,19 @@
             submitBtn.innerText = 'Uploading...';
             submitBtn.disabled = true;
 
-            // Simulate Upload
+            // Mock saving to DB
+            // In real app, we'd base64 the file or upload to server. 
+            // Here we just save the filename.
+            const user = LMS_DB.getUsers().find(u => u.role === 'student'); // Mock current user
+
             setTimeout(() => {
+                LMS_DB.submitAssignment({
+                    assignmentId: assignId || '1', // fallback id 1
+                    studentId: user ? user.id : 'S001',
+                    submittedUrl: 'mock_uploads/' + files[0].name,
+                    comments: 'Uploaded ' + files.length + ' files.'
+                });
+
                 const modal = document.getElementById('success-modal');
                 const content = document.getElementById('modal-content');
                 modal.classList.remove('hidden');
@@ -221,7 +283,9 @@
                     content.classList.remove('scale-90', 'opacity-0');
                     content.classList.add('scale-100', 'opacity-100');
                 }, 10);
-            }, 1500);
+
+                // Redirect logic handled by the modal button
+            }, 1000);
         });
     </script>
 </body>

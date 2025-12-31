@@ -15,11 +15,31 @@
     </script>
 </head>
 
-<body class="bg-gray-50 h-screen flex">
+<body class="bg-gray-50 h-screen flex overflow-hidden">
+
+    <!-- Mobile Header -->
+    <div
+        class="lg:hidden fixed top-0 w-full bg-slate-900 shadow-lg z-50 flex items-center justify-between px-4 h-16 text-white">
+        <div class="flex items-center gap-2">
+            <img src="../images/logo.png" class="h-8 w-8 rounded-full bg-white p-0.5" alt="Logo">
+            <span class="font-bold">Invertis<span class="text-blue-500">Faculty</span></span>
+        </div>
+        <button id="sidebarToggle" class="p-2 hover:bg-slate-800 rounded-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                </path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-slate-900 text-white flex flex-col">
-        <div class="h-16 flex items-center px-6 border-b border-slate-800">
+    <aside id="sidebar"
+        class="fixed inset-y-0 left-0 w-64 bg-slate-900 text-white flex flex-col z-50 transform -translate-x-full lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-300 ease-in-out">
+        <div class="h-16 flex items-center px-6 border-b border-slate-800 gap-3">
+            <img src="../images/logo.png" class="h-10 w-10 rounded-full object-cover bg-white p-0.5" alt="Logo">
             <span class="text-xl font-bold">Invertis<span class="text-blue-500">Faculty</span></span>
         </div>
         <nav class="flex-1 py-6 space-y-1">
@@ -29,15 +49,19 @@
                 class="block px-6 py-3 hover:bg-slate-800 border-l-4 border-transparent">Create Assessment</a>
             <a href="#" onclick="showSection('grading')"
                 class="block px-6 py-3 hover:bg-slate-800 border-l-4 border-transparent">Grading</a>
+            <a href="#" onclick="showSection('settings')"
+                class="block px-6 py-3 hover:bg-slate-800 border-l-4 border-transparent">Settings</a>
         </nav>
         <div class="p-4 border-t border-slate-800">
             <a href="../index.html"
-                class="flex items-center text-slate-400 hover:text-white transition-colors">Logout</a>
+                class="flex items-center text-slate-400 hover:text-white transition-colors mb-2">Logout</a>
+            <p class="text-[10px] text-slate-500 opacity-50 uppercase tracking-widest mt-4">Developed by Divyansh Singh
+            </p>
         </div>
     </aside>
 
     <!-- Main -->
-    <main class="flex-1 overflow-y-auto p-8">
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 pt-20 lg:pt-8">
 
         <!-- SECTION: Dashboard -->
         <div id="dashboard-section">
@@ -58,22 +82,8 @@
             </div>
 
             <h3 class="font-bold text-slate-800 mb-4">Your Courses</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Course Cards -->
-                <div class="bg-white border border-slate-200 rounded-lg p-5">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-2 bg-blue-100 rounded-lg text-blue-600 font-bold">CN</div>
-                    </div>
-                    <h4 class="font-bold text-slate-800">Computer Networks</h4>
-                    <p class="text-sm text-slate-500">CS-301 • 3rd Year</p>
-                </div>
-                <div class="bg-white border border-slate-200 rounded-lg p-5">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="p-2 bg-purple-100 rounded-lg text-purple-600 font-bold">CD</div>
-                    </div>
-                    <h4 class="font-bold text-slate-800">Compiler Design</h4>
-                    <p class="text-sm text-slate-500">CS-302 • 3rd Year</p>
-                </div>
+            <div id="course-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Javascript will populate this -->
             </div>
         </div>
 
@@ -222,6 +232,27 @@
             </div>
         </div>
 
+        <!-- SECTION: Settings -->
+        <div id="settings-section" class="hidden">
+            <h1 class="text-2xl font-bold text-slate-800 mb-6">Account Settings</h1>
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 max-w-lg">
+                <h3 class="text-lg font-bold text-slate-800 mb-4">Change Password</h3>
+                <form id="teacherPassForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Current Password</label>
+                        <input type="password" name="oldPass" required class="w-full border p-2 rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">New Password</label>
+                        <input type="password" name="newPass" required class="w-full border p-2 rounded-lg">
+                    </div>
+                    <button type="submit"
+                        class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">Update
+                        Password</button>
+                </form>
+            </div>
+        </div>
+
     </main>
 
     <!-- Grading Modal -->
@@ -247,12 +278,27 @@
 
     <script>
         function showSection(sectionId) {
-            ['dashboard', 'create', 'grading'].forEach(s => {
+            ['dashboard', 'create', 'grading', 'settings'].forEach(s => {
                 document.getElementById(s + '-section').classList.add('hidden');
             });
             document.getElementById(sectionId + '-section').classList.remove('hidden');
             if (sectionId === 'grading') loadGradingTable();
         }
+
+        // Change Password Logic
+        document.getElementById('teacherPassForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const oldPass = e.target.oldPass.value;
+            const newPass = e.target.newPass.value;
+            const teacher = JSON.parse(localStorage.getItem('currentUser'));
+
+            if (LMS_DB.changePassword(teacher.id, oldPass, newPass)) {
+                alert('Password Changed Successfully!');
+                e.target.reset();
+            } else {
+                alert('Incorrect Old Password!');
+            }
+        });
 
         function toggleCategory(type) {
             const container = document.getElementById('category-container');
@@ -263,129 +309,140 @@
             }
         }
 
-        // Initialize Call
-        toggleCategory('assignment'); // Default state
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTeacherDashboard();
+            toggleCategory('assignment');
+        });
 
-        function switchGradingTab(tab) {
-            document.getElementById('view-assignments').classList.add('hidden');
-            document.getElementById('view-quizzes').classList.add('hidden');
-            document.getElementById('view-' + tab).classList.remove('hidden');
+        function loadTeacherDashboard() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            if (!user || user.role !== 'teacher') {
+                // If direct access (for testing/demo), fallback to T001
+                const t = LMS_DB.getUsers().find(u => u.id === 'T001');
+                if (t) localStorage.setItem('currentUser', JSON.stringify(t));
+                else return; // Should not happen with seed data
+            }
+            const teacher = JSON.parse(localStorage.getItem('currentUser'));
 
-            const btnAssign = document.getElementById('tab-assignments');
-            const btnQuiz = document.getElementById('tab-quizzes');
+            // 1. Populate Dashboard Stats & Courses
+            const assigned = teacher.assignedSubjects || [];
 
-            if (tab === 'assignments') {
-                btnAssign.classList.add('border-blue-600', 'text-blue-600');
-                btnAssign.classList.remove('border-transparent', 'text-slate-500');
-                btnQuiz.classList.add('border-transparent', 'text-slate-500');
-                btnQuiz.classList.remove('border-blue-600', 'text-blue-600');
-            } else {
-                btnQuiz.classList.add('border-blue-600', 'text-blue-600');
-                btnQuiz.classList.remove('border-transparent', 'text-slate-500');
-                btnAssign.classList.add('border-transparent', 'text-slate-500');
-                btnAssign.classList.remove('border-blue-600', 'text-blue-600');
+            // Generate Course Cards
+            const courseGrid = document.getElementById('course-grid');
+            if (courseGrid) {
+                courseGrid.innerHTML = assigned.map(s => `
+                    <div class="bg-white border border-slate-200 rounded-lg p-5">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="p-2 bg-blue-100 rounded-lg text-blue-600 font-bold">${s.code}</div>
+                        </div>
+                        <h4 class="font-bold text-slate-800">${s.name}</h4>
+                        <p class="text-sm text-slate-500">${s.branch} • ${s.year}rd Year • Sec ${s.section}</p>
+                    </div>
+                 `).join('');
+            }
+
+            // Populate Create Assessment Subject Dropdown
+            const subjectSelect = document.querySelector('select[name="subjectId"]');
+            if (subjectSelect) {
+                subjectSelect.innerHTML = assigned.map(s => `<option value="${s.code}">${s.name} (${s.section})</option>`).join('');
             }
         }
-
-        document.getElementById('createForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
-
-            // Clean up: if quiz, category is 'quiz' implicitly
-            if (data.type === 'quiz') data.category = 'quiz';
-
-            LMS_DB.createAssignment(data);
-            alert('Assessment Created Successfully!');
-            e.target.reset();
-            toggleCategory('assignment'); // Reset UI
-        });
 
         function loadGradingTable() {
             const assignments = LMS_DB.getAssignments();
             const users = LMS_DB.getUsers();
 
-            // Mock Logged In Teacher (Dr. Smith, CS Dept)
-            // In real app, get from session
-            const currentTeacher = users.find(u => u.id === 'T001');
-
-            // Filter Students: Must match Teacher's Dept & Branch
-            // AND (Optional) matches year/section if assignments were specific, but for now just Dept/Branch
-            const myStudents = users.filter(u =>
-                u.role === 'student' &&
-                u.dept === currentTeacher.dept &&
-                u.branch === currentTeacher.branch
-            );
+            // Get Logged In Teacher
+            const currentTeacher = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentTeacher || !currentTeacher.assignedSubjects) return;
 
             // Clear all tables
             ['gradingTable-lab', 'gradingTable-midterm', 'gradingTable-general', 'gradingTable-quiz'].forEach(id => {
                 document.getElementById(id).innerHTML = '';
             });
 
-            assignments.forEach(assign => {
-                // Determine target table
-                let targetId = 'gradingTable-general';
-                if (assign.type === 'quiz') targetId = 'gradingTable-quiz';
-                else if (assign.category === 'lab') targetId = 'gradingTable-lab';
-                else if (assign.category === 'midterm') targetId = 'gradingTable-midterm';
+            // Iterate through assigned subjects to find relevant assignments and students
+            currentTeacher.assignedSubjects.forEach(subject => {
 
-                const tableRef = document.getElementById(targetId);
-                const isLocked = assign.isLocked === true;
+                // 1. Find Assignments for this subject code
+                // AND match the specific target audience (Year, Section, Branch if recorded in assignment)
+                // For simplicity, we match SubjectCode.
+                const relevantAssignments = assignments.filter(a => a.subjectId === subject.code);
 
-                // For each valid student, create a row
-                myStudents.forEach(student => {
-                    const subs = LMS_DB.getSubmissions();
-                    const sub = subs.find(s => s.assignmentId === assign.id && s.studentId === student.id);
-                    const isGraded = sub && sub.status === 'graded';
+                relevantAssignments.forEach(assign => {
+                    // Determine target table
+                    let targetId = 'gradingTable-general';
+                    if (assign.type === 'quiz') targetId = 'gradingTable-quiz';
+                    else if (assign.category === 'lab') targetId = 'gradingTable-lab';
+                    else if (assign.category === 'midterm') targetId = 'gradingTable-midterm';
+                    const tableRef = document.getElementById(targetId);
 
-                    const tr = document.createElement('tr');
-                    tr.className = "bg-white border-b hover:bg-gray-50";
-                    tr.innerHTML = `
-                        <td class="px-6 py-4 font-medium text-slate-900">
-                            <div class="flex items-center gap-3">
-                                <img src="${student.avatar}" class="w-8 h-8 rounded-full">
-                                <div>
-                                    <div>${student.name}</div>
-                                    <div class="text-xs text-slate-500 font-normal">${student.year}rd Year - Sec ${student.section}</div>
+                    const isLocked = assign.isLocked === true;
+
+                    // 2. Find eligible students for this specific assignment Scope
+                    // Logic: Student must be in same Branch, Year, Section as the Subject taught by teacher
+                    const eligibleStudents = users.filter(u =>
+                        u.role === 'student' &&
+                        u.branch === subject.branch &&
+                        u.year == subject.year &&
+                        u.section === subject.section
+                    );
+
+                    eligibleStudents.forEach(student => {
+                        const subs = LMS_DB.getSubmissions();
+                        const sub = subs.find(s => s.assignmentId === assign.id && s.studentId === student.id);
+                        const isGraded = sub && sub.status === 'graded';
+
+                        const tr = document.createElement('tr');
+                        tr.className = "bg-white border-b hover:bg-gray-50";
+                        tr.innerHTML = `
+                            <td class="px-6 py-4 font-medium text-slate-900">
+                                <div class="flex items-center gap-3">
+                                    <img src="${student.avatar}" class="w-8 h-8 rounded-full">
+                                    <div>
+                                        <div>${student.name}</div>
+                                        <div class="text-xs text-slate-500 font-normal">${student.year}rd Year - Sec ${student.section}</div>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="font-medium">${assign.title}</div>
-                            <div class="flex items-center gap-2 mt-1">
-                                <span class="text-xs text-slate-500 uppercase">${assign.type === 'quiz' ? 'Quiz' : (assign.category || 'General')}</span>
-                                <span class="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded border border-gray-200">Due: ${assign.dueDate || 'No Date'}</span>
-                            </div>
-                            ${isLocked ? '<span class="text-xs text-red-500 font-bold flex items-center gap-1 mt-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> LOCKED</span>' : ''}
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex flex-col gap-1">
-                                ${isGraded
-                            ? `<span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded w-fit">Graded: ${sub.marksObtained}/${assign.maxMarks}</span>`
-                            : '<span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded w-fit">Pending</span>'
-                        }
-                                ${sub && sub.submittedUrl ? `<a href="${sub.submittedUrl}" target="_blank" class="text-xs text-blue-600 hover:underline flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> View Submission</a>` : ''}
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex flex-col gap-2">
-                                <button onclick="openGradeModal('${assign.id}', '${student.id}')" class="text-blue-600 hover:underline text-sm font-medium text-left">
-                                    ${isGraded ? 'Edit Marks' : 'Grade Student'}
-                                </button>
-                                <div class="border-t pt-1 mt-1">
-                                    ${isLocked
-                            ? `<button onclick="toggleLock('${assign.id}', false)" class="text-green-600 hover:bg-green-50 px-2 py-1 rounded text-xs w-full text-left flex items-center gap-1">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg> Unlock Assignment
-                                        </button>`
-                            : `<button onclick="toggleLock('${assign.id}', true)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs w-full text-left flex items-center gap-1">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> Lock Assignment
-                                        </button>`
-                        }
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="font-medium">${assign.title}</div>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-xs text-slate-500 uppercase">${subject.code}</span>
+                                    <span class="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded border border-gray-200">Due: ${assign.dueDate || 'No Date'}</span>
                                 </div>
-                            </div>
-                        </td>
-                    `;
-                    if (tableRef) tableRef.appendChild(tr);
+                                ${isLocked ? '<span class="text-xs text-red-500 font-bold flex items-center gap-1 mt-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> LOCKED</span>' : ''}
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col gap-1">
+                                    ${isGraded
+                                ? `<span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded w-fit">Graded: ${sub.marksObtained}/${assign.maxMarks}</span>`
+                                : '<span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded w-fit">Pending</span>'
+                            }
+                                    ${sub && sub.submittedUrl ? `<a href="${sub.submittedUrl}" target="_blank" class="text-xs text-blue-600 hover:underline flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg> View Submission</a>` : ''}
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex flex-col gap-2">
+                                    <button onclick="openGradeModal('${assign.id}', '${student.id}')" class="text-blue-600 hover:underline text-sm font-medium text-left">
+                                        ${isGraded ? 'Edit Marks' : 'Grade Student'}
+                                    </button>
+                                    <div class="border-t pt-1 mt-1">
+                                        ${isLocked
+                                ? `<button onclick="toggleLock('${assign.id}', false)" class="text-green-600 hover:bg-green-50 px-2 py-1 rounded text-xs w-full text-left flex items-center gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg> Unlock
+                                            </button>`
+                                : `<button onclick="toggleLock('${assign.id}', true)" class="text-red-500 hover:bg-red-50 px-2 py-1 rounded text-xs w-full text-left flex items-center gap-1">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg> Lock
+                                            </button>`
+                            }
+                                    </div>
+                                </div>
+                            </td>
+                        `;
+                        if (tableRef) tableRef.appendChild(tr);
+                    });
                 });
             });
         }
@@ -417,6 +474,33 @@
             closeModal();
             loadGradingTable();
         }
+
+        // Sidebar Toggle Mobile
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            if (isOpen) {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('hidden');
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+                sidebarOverlay.classList.remove('hidden');
+            }
+        }
+
+        if (sidebarToggle) sidebarToggle.onclick = toggleSidebar;
+        if (sidebarOverlay) sidebarOverlay.onclick = toggleSidebar;
+
+        // Auto-close on tab click (mobile)
+        const navLinks = sidebar ? sidebar.querySelectorAll('a') : [];
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) toggleSidebar();
+            });
+        });
     </script>
 </body>
 
